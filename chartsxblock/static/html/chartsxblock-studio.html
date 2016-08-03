@@ -1,19 +1,16 @@
 <div class="chartsxblock_block">
     <div class="chartsxblock_settings">
         <div class="chartsxblock_manualinput">
-            <!-- TODO: Replace ID areas with unique ID's for whole platform -->
-            <textarea rows="1" id="chart_name" class="chart_name"> {{self.chartName}} </textarea>
-            <select id="chart_type" class="chart_type" name="chart_type">
+            <textarea rows="1" class="chart_name"> {{self.chartName}} </textarea>
+            <select class="chart_type" name="chart_type">
                 {% for chart in self.chartTypes %}
                     <option value="{{chart}}" {% if chart == self.chartType %} selected="selected" {% endif %} >
                         {{chart|capfirst}}
                     </option>
                 {% endfor %}
             </select>
-
-            <textarea rows="12" id="chart_data" class="chart_data"> {{self.chartData}} </textarea>
-
-            <button id="updateButton" class="updateButton">Update</button>
+            <textarea rows="12" class="chart_data"> {{self.chartData}} </textarea>
+            <button class="updateButton">Update</button>
         </div>
     </div>
 </div>

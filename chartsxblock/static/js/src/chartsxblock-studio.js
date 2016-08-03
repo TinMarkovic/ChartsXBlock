@@ -1,14 +1,16 @@
 /* Javascript for ChartsXBlock-Studio. */
+var chartTypes;
+
 function ChartsXBlockStudio(runtime, element, data) {
     $(function ($) {
+        chartTypes = data.chartTypes;
     });
-    $("#updateButton").click(function(){
-        console.log("Click");
+    $(element).find(".updateButton").click(function(){
         try{
             runtime.notify('save', {state: 'start'});
-            cleanType = ValidateType($("#chart_type").val());
-            cleanName = ValidateName($("#chart_name").val());
-            cleanData = ValidateData($("#chart_data").val());
+            cleanType = ValidateType($(element).find(".chart_type").val());
+            cleanName = ValidateName($(element).find(".chart_name").val());
+            cleanData = ValidateData($(element).find(".chart_data").val());
             var handlerUrl = runtime.handlerUrl(element, 'edit_data');
 
             $.ajax({
@@ -19,14 +21,16 @@ function ChartsXBlockStudio(runtime, element, data) {
                 }
             });
         } catch (e) {
-            console.log("Error: \n", e);
-            runtime.notify('cancel', {});
+            console.log("Error with stack trace: \n", e);
+            showError(runtime, e );
         }
     });
 }
 
-/*
-TODO: Implement validation of chart before sending it off. (finish this)
+function showError(runtime, errorMsg) {
+    runtime.notify('error', {msg: errorMsg});
+}
+
 function BadChartError(message) {
     this.message = message;
     // Use V8's native method if available, otherwise fallback
@@ -37,7 +41,7 @@ function BadChartError(message) {
 }
 
 BadChartError.prototype = Object.create(Error.prototype);
-BadChartError.prototype.name = "BadChartError";
+BadChartError.prototype.name = "Bad Chart Error";
 BadChartError.prototype.constructor = BadChartError;
 
 function size(ar){
@@ -46,27 +50,30 @@ function size(ar){
     for(var i=0;i<row_count;i++){
         row_sizes.push(ar[i].length)
     }
-    if(Math.min.apply(null, row_sizes) != Math.max.apply(null, row_sizes)) throw new BadChartError("")
+    if(Math.min.apply(null, row_sizes) != Math.max.apply(null, row_sizes))
+        throw new BadChartError("All chart rows are not equal length.")
     return [row_count, Math.min.apply(null, row_sizes)]
 }
-*/
 
 function ValidateData(inputString) {
-    //TODO
     try {
         parsedString = JSON.parse(inputString);
     } catch (e) {
         throw e;
     }
+    chartDimensions = size(parsedString);
+    if (chartDimensions[0] < 2) throw new BadChartError("Only one row is present in the chart.")
     return inputString;
 }
 
 function ValidateType(inputString) {
-    //TODO
+    if(chartTypes.indexOf(inputString) == -1 ) throw new BadChartError("Using an unsupported chart type.");
+
     return inputString;
 }
 
 function ValidateName(inputString) {
-    //TODO
+    if(inputString.length < 1) throw new BadChartError("Chart name is empty.");
+
     return inputString;
 }

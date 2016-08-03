@@ -1,11 +1,13 @@
 /* Javascript for ChartsXBlock. */
 var chartData, chartType, chartName;
+var target;
 
 function ChartsXBlock(runtime, element, data) {
     $(function ($) {
         chartData = data.chartData;
         chartType = data.chartType;
         chartName = data.chartName;
+        target = $(element).find(".chart")[0];
 
         // Loading Google's chart library - but only if it's not loaded already.
         try{
@@ -22,7 +24,6 @@ function ChartsXBlock(runtime, element, data) {
 function drawChart() {
     var data = google.visualization.arrayToDataTable(JSON.parse(chartData), false);
     var options = {'title': chartName};
-    var target = document.getElementById('chart');
     switch(chartType) {
         case "Pie":
             var chart = new google.visualization.PieChart(target);

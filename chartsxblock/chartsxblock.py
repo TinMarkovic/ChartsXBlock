@@ -70,7 +70,8 @@ class ChartsXBlock(XBlock):
         frag.add_javascript(self.resource_string("static/js/src/chartsxblock.js"))
         frag.initialize_js('ChartsXBlock', {'chartData': self.chartData,
                                             'chartType': self.chartType,
-                                            'chartName': self.chartName})
+                                            'chartName': self.chartName,
+                                            'chartTypes': self.chartTypes})
         return frag
 
     def studio_view(self, context=None):
@@ -84,7 +85,8 @@ class ChartsXBlock(XBlock):
         frag.add_javascript(self.resource_string("static/js/src/chartsxblock-studio.js"))
         frag.initialize_js('ChartsXBlockStudio', {'chartData': self.chartData,
                                                   'chartType': self.chartType,
-                                                  'chartName': self.chartName})
+                                                  'chartName': self.chartName,
+                                                  'chartTypes': self.chartTypes})
         return frag
 
     @XBlock.json_handler
