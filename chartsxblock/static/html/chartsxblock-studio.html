@@ -1,16 +1,28 @@
 <div class="chartsxblock_block">
     <div class="chartsxblock_settings">
+        <textarea rows="1" class="chart_name"> {{self.chartName}} </textarea>
+        <select class="chart_type" name="chart_type">
+            {% for chart in self.chartTypes %}
+                <option value="{{chart}}" {% if chart == self.chartType %} selected="selected" {% endif %} >
+                    {{chart|capfirst}}
+                </option>
+            {% endfor %}
+        </select>
+        <!--
         <div class="chartsxblock_manualinput">
-            <textarea rows="1" class="chart_name"> {{self.chartName}} </textarea>
-            <select class="chart_type" name="chart_type">
-                {% for chart in self.chartTypes %}
-                    <option value="{{chart}}" {% if chart == self.chartType %} selected="selected" {% endif %} >
-                        {{chart|capfirst}}
-                    </option>
-                {% endfor %}
-            </select>
             <textarea rows="12" class="chart_data"> {{self.chartData}} </textarea>
-            <button class="updateButton">Update</button>
         </div>
+        -->
+        <div class="chartsxblock_table">
+        <button class="chart-right-add fancyButton"> Add Column </button>
+        <button class="chart-right-del fancyButton"> Remove Column </button>
+        <button class="chart-bottom-add fancyButton"> Add Row </button>
+        <button class="chart-bottom-del fancyButton"> Remove Row </button>
+            <table class="chart-table chart-table-striped">
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <button class="updateButton fancyButton">Update</button>
     </div>
 </div>

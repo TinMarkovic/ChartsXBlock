@@ -19,16 +19,15 @@ textarea{
 }
 
 .chart_name{
-    width: 82%;
+    width: 425px;
+    margin-bottom: 5px;
 }
 
 .chart_data{
     width: 100%;
 }
 
-.updateButton{
-    position:absolute;
-    bottom: 12px;
+.fancyButton{
     transition: background-color 0.15s,box-shadow 0.15s;
     box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset,0 0 0 transparent;
     display: inline-block;
@@ -39,4 +38,36 @@ textarea{
     background-color: #0074b4;
     border-color: #007fb8;
     color: #fff;
+}
+
+.chart-table {
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+    border: 1px solid #cbcbcb;
+}
+
+.chart-table td,
+.chart-table th {
+    border-left: 1px solid #cbcbcb;
+    border-width: 0 0 0 1px;
+    font-size: inherit;
+    margin: 0;
+    overflow: visible;
+    padding: 0.5em 1em;
+}
+
+.chart-table td {
+    background-color: transparent;
+}
+
+.chart-table tr:first-child {
+    font-weight: bold;
+}
+
+.chart-table-striped tr:nth-child(2n-1) td {
+    background-color: #f2f2f2;
 }
