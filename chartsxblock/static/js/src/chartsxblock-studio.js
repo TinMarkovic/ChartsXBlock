@@ -113,7 +113,6 @@ function size(ar){
 }
 
 function ValidateData(inputString) {
-    console.log(inputString);
     try {
         parsedString = JSON.parse(inputString);
     } catch (e) {
@@ -181,7 +180,6 @@ function ChartTable(targetDiv, inputJSON){
     this.json = function(skipUpdate) {
     // If called without parameters - updates then sends a JSON
         if (typeof(toUpdate)==='undefined') this.update();
-        console.log(this.data);
         return(JSON.stringify(this.data));
     }
 
