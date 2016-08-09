@@ -141,9 +141,9 @@ function ChartTable(targetDiv, inputJSON){
 
     this.draw = function() {
     // Draws the table in a div
-        for (i = 0; i < this.data.length; i++) {
+        for (i = 0; i < this.rows; i++) {
             var row = $("<tr>");
-            for (j = 0; j < this.data[i].length; j++) {
+            for (j = 0; j < this.columns; j++) {
                 var field = $("<td>" + this.data[i][j] + "</td>");
                 row.append(field);
             }
@@ -155,7 +155,7 @@ function ChartTable(targetDiv, inputJSON){
     // Updates the table from its div element
         var dataArray = [];
         var parent = this;
-        this.div.find("tbody").children("tr").each(function() {
+        this.div.find("tbody tr").each(function() {
             var row = [];
             $(this).children("td").each(function() {
                 row.push(parent.parse($(this).text()));
@@ -179,7 +179,7 @@ function ChartTable(targetDiv, inputJSON){
 
     this.json = function(skipUpdate) {
     // If called without parameters - updates then sends a JSON
-        if (typeof(toUpdate)==='undefined') this.update();
+        if (typeof(skipUpdate)==='undefined') this.update();
         return(JSON.stringify(this.data));
     }
 
@@ -194,12 +194,12 @@ function ChartTable(targetDiv, inputJSON){
 
     this.removeRow = function() {
         if(this.rows <2) throw {name: "Dimensions Error", message: "You cannot have 0 rows."};
-        this.div.find("tbody").find("> tr:last").remove();
+        this.div.find("tbody > tr:last").remove();
         this.rows--;
     }
 
     this.addColumn = function() {
-        this.div.find("tbody").children("tr").each(function() {
+        this.div.find("tbody tr").each(function() {
             $(this).append($('<td>').makeEditable());
         });
         this.columns++;
@@ -207,7 +207,7 @@ function ChartTable(targetDiv, inputJSON){
 
     this.removeColumn = function() {
         if(this.columns <2) throw {name: "Dimensions Error", message: "You cannot have 0 columns."};
-        this.div.find("tbody").children("tr").each(function() {
+        this.div.find("tbody tr").each(function() {
             $(this).find("> td:last").remove();
         });
         this.columns--;

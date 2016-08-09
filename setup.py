@@ -24,7 +24,7 @@ setup(
     name='chartsxblock-xblock',
     version='1.0.0',
     description='XBlock for Charts',
-    license='UNKNOWN',
+    license='MIT',
     packages=[
         'chartsxblock',
     ],
