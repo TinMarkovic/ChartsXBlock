@@ -12,9 +12,9 @@ function ChartsXBlockStudio(runtime, element, data) {
     $(element).find(".updateButton").click(function(){
         try{
             runtime.notify('save', {state: 'start'});
-            cleanType = ValidateType($(element).find(".chart_type").val(), chartTypes);
-            cleanName = ValidateName($(element).find(".chart_name").val());
-            cleanData = ValidateData(chart.json());
+            var cleanType = ValidateType($(element).find(".chart_type").val(), chartTypes);
+            var cleanName = ValidateName($(element).find(".chart_name").val());
+            var cleanData = ValidateData(chart.json());
             var handlerUrl = runtime.handlerUrl(element, 'edit_data');
 
             $.ajax({
@@ -82,7 +82,7 @@ $.fn.makeEditable = function() {
         });
     });
     return this;
-}
+};
 
 function showError(runtime, errorMsg) {
     runtime.notify('error', {msg: errorMsg});
@@ -103,7 +103,7 @@ BadChartError.prototype.constructor = BadChartError;
 
 function size(ar){
     var row_count = ar.length;
-    var row_sizes = []
+    var row_sizes = [];
     for(var i=0;i<row_count;i++){
         row_sizes.push(ar[i].length);
     }
@@ -113,13 +113,14 @@ function size(ar){
 }
 
 function ValidateData(inputString) {
+    var parsedString;
     try {
         parsedString = JSON.parse(inputString);
     } catch (e) {
         throw e;
     }
-    chartDimensions = size(parsedString);
-    if (chartDimensions[0] < 2) throw new BadChartError("The chart requires more than one row.")
+    var chartDimensions = size(parsedString);
+    if (chartDimensions[0] < 2) throw new BadChartError("The chart requires more than one row.");
     return inputString;
 }
 
@@ -141,15 +142,15 @@ function ChartTable(targetDiv, inputJSON){
 
     this.draw = function() {
     // Draws the table in a div
-        for (i = 0; i < this.rows; i++) {
+        for (var i = 0; i < this.rows; i++) {
             var row = $("<tr>");
-            for (j = 0; j < this.columns; j++) {
+            for (var j = 0; j < this.columns; j++) {
                 var field = $("<td>" + this.data[i][j] + "</td>");
                 row.append(field);
             }
             this.div.find("tbody").append(row);
         }
-    }
+    };
 
     this.update = function() {
     // Updates the table from its div element
@@ -163,47 +164,44 @@ function ChartTable(targetDiv, inputJSON){
             dataArray.push(row);
         });
         this.data = dataArray;
-    }
+    };
 
     this.parse = function(val) {
-        if (val == parseInt(val)) {
-            return parseInt(val);
-        }
         else if (val == parseFloat(val)) {
             return parseFloat(val);
         }
         else {
             return val;
         }
-    }
+    };
 
     this.json = function(skipUpdate) {
     // If called without parameters - updates then sends a JSON
         if (typeof(skipUpdate)==='undefined') this.update();
         return(JSON.stringify(this.data));
-    }
+    };
 
     this.addRow = function() {
         var rowSelector = $('<tr>');
         this.div.find("tbody").append(rowSelector);
-        for (i = 0; i < this.columns; i++) {
+        for (var i = 0; i < this.columns; i++) {
             rowSelector.append($('<td>').makeEditable());
         }
         this.rows++;
-    }
+    };
 
     this.removeRow = function() {
         if(this.rows <2) throw {name: "Dimensions Error", message: "You cannot have 0 rows."};
         this.div.find("tbody > tr:last").remove();
         this.rows--;
-    }
+    };
 
     this.addColumn = function() {
         this.div.find("tbody tr").each(function() {
             $(this).append($('<td>').makeEditable());
         });
         this.columns++;
-    }
+    };
 
     this.removeColumn = function() {
         if(this.columns <2) throw {name: "Dimensions Error", message: "You cannot have 0 columns."};
@@ -211,5 +209,5 @@ function ChartTable(targetDiv, inputJSON){
             $(this).find("> td:last").remove();
         });
         this.columns--;
-    }
+    };
 }

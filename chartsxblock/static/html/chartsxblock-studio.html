@@ -1,9 +1,9 @@
 <div class="chartsxblock_block">
     <div class="chartsxblock_settings">
-        <textarea rows="1" class="chart_name"> {{self.chartName}} </textarea>
+        <textarea rows="1" class="chart_name"> {{self.chart_name}} </textarea>
         <select class="chart_type" name="chart_type">
-            {% for chart in self.chartTypes %}
-                <option value="{{chart}}" {% if chart == self.chartType %} selected="selected" {% endif %} >
+            {% for chart in self.chart_types %}
+                <option value="{{chart}}" {% if chart == self.chart_type %} selected="selected" {% endif %} >
                     {{chart|capfirst}}
                 </option>
             {% endfor %}

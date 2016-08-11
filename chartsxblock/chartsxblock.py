@@ -2,18 +2,18 @@
 
 import pkg_resources
 
-from xblock.core import XBlock
-from xblock.fields import Scope, String
-from xblock.fragment import Fragment
-from django.template import Context, Template
+from xblock.core import XBlock  # pylint: disable=import-error
+from xblock.fields import Scope, String  # pylint: disable=import-error
+from xblock.fragment import Fragment  # pylint: disable=import-error
+from django.template import Context, Template  # pylint: disable=import-error
 
 
 class ChartsXBlock(XBlock):
     """
     XBlock displaying different kinds of Charts to the end user.
     """
-    chartTypes = ('Pie', 'Line', 'Column', 'Area', 'Scatter', 'Bar')
-    chartData = String(
+    chart_types = ('Pie', 'Line', 'Column', 'Area', 'Scatter', 'Bar')
+    chart_data = String(
         default='''[
 [
 "Employee Name",
@@ -47,34 +47,38 @@ class ChartsXBlock(XBlock):
         scope=Scope.content,
         help="String holding the data for the chart",
     )
-    chartType = String(
+    chart_type = String(
         default='Pie',
         scope=Scope.content,
         help="String holding the type of the chart",
     )
-    chartName = String(
+    chart_name = String(
         default='Worker salaries overview',
         scope=Scope.content,
         help="String holding the name of the chart",
     )
 
-    def resource_string(self, path):
+    @staticmethod
+    def resource_string(path):
+        """Handy helper for getting resources from our kit."""
         data = pkg_resources.resource_string(__name__, path)
         return data.decode("utf8")
 
-    def student_view(self, context=None):
+    def student_view(self, context=None):  # pylint: disable=unused-argument
+        """Base method to show the XBlock to the student."""
         html = self.resource_string("static/html/chartsxblock.html")
         frag = Fragment(html.format(self=self))
         frag.add_css(self.resource_string("static/css/chartsxblock.css"))
         frag.add_javascript(self.resource_string("static/vendor/GCloader.js"))
         frag.add_javascript(self.resource_string("static/js/src/chartsxblock.js"))
-        frag.initialize_js('ChartsXBlock', {'chartData': self.chartData,
-                                            'chartType': self.chartType,
-                                            'chartName': self.chartName,
-                                            'chartTypes': self.chartTypes})
+        frag.initialize_js('ChartsXBlock', {'chartData': self.chart_data,
+                                            'chartType': self.chart_type,
+                                            'chartName': self.chart_name,
+                                            'chartTypes': self.chart_types})
         return frag
 
-    def studio_view(self, context=None):
+    def studio_view(self, context=None):  # pylint: disable=unused-argument
+        """Base method to show the XBlock to the editor, in studio."""
         # Using the Django templating engine on the fragment
         non_rendered_html = self.resource_string("static/html/chartsxblock-studio.html")
         template = Template(non_rendered_html)
@@ -83,15 +87,16 @@ class ChartsXBlock(XBlock):
 
         frag.add_css(self.resource_string("static/css/chartsxblock.css"))
         frag.add_javascript(self.resource_string("static/js/src/chartsxblock-studio.js"))
-        frag.initialize_js('ChartsXBlockStudio', {'chartData': self.chartData,
-                                                  'chartType': self.chartType,
-                                                  'chartName': self.chartName,
-                                                  'chartTypes': self.chartTypes})
+        frag.initialize_js('ChartsXBlockStudio', {'chartData': self.chart_data,
+                                                  'chartType': self.chart_type,
+                                                  'chartName': self.chart_name,
+                                                  'chartTypes': self.chart_types})
         return frag
 
     @XBlock.json_handler
-    def edit_data(self, data, suffix=''):
-        self.chartName = data["name"].strip(" ")
-        self.chartType = data["type"]
-        self.chartData = data["data"].strip(" ")
+    def edit_data(self, data, suffix=''):  # pylint: disable=unused-argument
+        """Method saving the sent data to the XBlock database."""
+        self.chart_name = data["name"].strip(" ")
+        self.chart_type = data["type"]
+        self.chart_data = data["data"].strip(" ")
         return True
