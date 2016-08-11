@@ -167,7 +167,7 @@ function ChartTable(targetDiv, inputJSON){
     };
 
     this.parse = function(val) {
-        else if (val == parseFloat(val)) {
+        if (val == parseFloat(val)) {
             return parseFloat(val);
         }
         else {
