@@ -22,9 +22,9 @@ def package_data(pkg, roots):
 
 setup(
     name='chartsxblock-xblock',
-    version='0.2.0',
+    version='1.0.0',
     description='XBlock for Charts',
-    license='UNKNOWN',
+    license='MIT',
     packages=[
         'chartsxblock',
     ],
