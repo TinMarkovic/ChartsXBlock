@@ -23,7 +23,7 @@ function ChartsXBlock(runtime, element, data) {
 
 function drawChart() {
     var data = google.visualization.arrayToDataTable(JSON.parse(chartData), false);
-    var options = {'title': chartName};
+    var options = {'title': chartName, is3D: true};
     switch(chartType) {
         case "Pie":
             var chart = new google.visualization.PieChart(target);
