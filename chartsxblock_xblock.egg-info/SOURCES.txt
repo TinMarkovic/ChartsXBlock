@@ -1,6 +1,5 @@
 chartsxblock/__init__.py
 chartsxblock/chartsxblock.py
-chartsxblock/public/vendor/Chart.min.js
 chartsxblock/static/README.txt
 chartsxblock/static/css/chartsxblock.css
 chartsxblock/static/html/chartsxblock-studio.html
@@ -8,8 +7,6 @@ chartsxblock/static/html/chartsxblock.html
 chartsxblock/static/js/src/chartsxblock-studio.js
 chartsxblock/static/js/src/chartsxblock.js
 chartsxblock/static/vendor/GCloader.js
-chartsxblock/static/vendor/c3.css
-chartsxblock/static/vendor/c3.js
 chartsxblock_xblock.egg-info/PKG-INFO
 chartsxblock_xblock.egg-info/SOURCES.txt
 chartsxblock_xblock.egg-info/dependency_links.txt

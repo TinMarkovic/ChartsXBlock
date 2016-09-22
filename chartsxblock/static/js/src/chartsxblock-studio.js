@@ -6,7 +6,7 @@ function ChartsXBlockStudio(runtime, element, data) {
         chartTypes = data.chartTypes;
         chart = new ChartTable($(".chartsxblock_table"), data.chartData);
         chart.draw();
-        $("td").makeEditable();
+        $("td").not('.actions').makeEditable();
     });
 
     $(element).find(".updateButton").click(function(){
@@ -38,7 +38,7 @@ function ChartsXBlockStudio(runtime, element, data) {
     });
     $( ".chart-bottom-del" ).click(function() {
         try{
-            chart.removeRow();
+            chart.removeLastRow();
         } catch (e) {
             showError(runtime, e);
         }
@@ -46,6 +46,13 @@ function ChartsXBlockStudio(runtime, element, data) {
     $( ".chart-right-del" ).click(function() {
         try{
             chart.removeColumn();
+        } catch (e) {
+            showError(runtime, e);
+        }
+    });
+    $(document).find(element).on('click', '.deleteRow', function(event) {
+        try{
+            chart.removeRow($(event.target).parent().parent());
         } catch (e) {
             showError(runtime, e);
         }
@@ -142,12 +149,26 @@ function ChartTable(targetDiv, inputJSON){
 
     this.draw = function() {
     // Draws the table in a div
+        /*var delete_column_row = $("<tr>"),
+            delete_column = $('<td class="actions"><button class="deleteButtons deleteColumn">Delete column</button></td>');
+            
+        for(var i = 0; i < this.columns; i++) {
+            delete_column_row.append(delete_column.clone());
+        }
+        delete_column_row.append($('<td class="actions"></td>'));
+        this.div.find("tbody").append(delete_column_row);*/
+
         for (var i = 0; i < this.rows; i++) {
-            var row = $("<tr>");
+            var row = $("<tr>"),
+                deleteButton = '<td class="actions"></td>';
             for (var j = 0; j < this.columns; j++) {
                 var field = $("<td>" + this.data[i][j] + "</td>");
                 row.append(field);
             }
+            if(i !== 0) {
+                deleteButton = $('<td class="actions"><button class="deleteButtons deleteRow">X</button></td>');
+            }
+            row.append(deleteButton);
             this.div.find("tbody").append(row);
         }
     };
@@ -158,7 +179,7 @@ function ChartTable(targetDiv, inputJSON){
         var parent = this;
         this.div.find("tbody tr").each(function() {
             var row = [];
-            $(this).children("td").each(function() {
+            $(this).children("td").not('.actions').each(function() {
                 row.push(parent.parse($(this).text()));
             });
             dataArray.push(row);
@@ -183,14 +204,15 @@ function ChartTable(targetDiv, inputJSON){
 
     this.addRow = function() {
         var rowSelector = $('<tr>');
-        this.div.find("tbody").append(rowSelector);
         for (var i = 0; i < this.columns; i++) {
             rowSelector.append($('<td>').makeEditable());
         }
+        rowSelector.append($('<td class="actions"><button class="deleteButtons deleteRow">X</button></td>'));
+        this.div.find("tbody").append(rowSelector);
         this.rows++;
     };
 
-    this.removeRow = function() {
+    this.removeLastRow = function() {
         if(this.rows <2) throw {name: "Dimensions Error", message: "You cannot have 0 rows."};
         this.div.find("tbody > tr:last").remove();
         this.rows--;
@@ -210,4 +232,15 @@ function ChartTable(targetDiv, inputJSON){
         });
         this.columns--;
     };
+
+    this.removeRow = function(row=null) {
+        if(this.rows <2) throw {name: "Dimensions Error", message: "You cannot have 0 rows."};
+        if(row) {
+            row.remove();
+        }
+        else {
+            this.removeLastRow();
+        }
+        this.rows--;
+    }
 }
