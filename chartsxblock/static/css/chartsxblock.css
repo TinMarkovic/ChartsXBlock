@@ -40,11 +40,11 @@ textarea{
     color: #fff;
 }
 
-.deleteButtons{
-    background-color: #FF3364;
-    border-color: #FF3e6f;
-    border-radius: 5px;
+.deleteRow, .deleteColumn{
+    background-color: red;
     color: white;
+    border-color: red;
+    border-radius: 5px;
 }
 
 .chart-table {
