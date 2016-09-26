@@ -145,34 +145,35 @@ function ChartTable(targetDiv, inputJSON){
         var delete_column_row = $("<tr>"),
             delete_column = '';
 
-        for (var i = 0; i < this.rows; i++) {
+        for (var i = 0; i < this.rows + 1; i++) {
             var row = $("<tr>"),
                 deleteButton = '<td class="actions"></td>';
             for (var j = 0; j < this.columns; j++) {
-                var field = $("<td>" + this.data[i][j] + "</td>");
-                row.append(field);
+                var field;
 
-                if(i == 0) {
-                    delete_column = $('<td class="actions"><button data-columnnumber="' + j + '" class="deleteColumn fa fa-times" aria-hidden="true"></button></td>');
-                    delete_column_row.append(delete_column.clone());
+                if(i === this.rows) {
+                    field = $('<td class="actions"><button data-columnnumber="' + j + '" class="deleteColumn fa fa-times" aria-hidden="true"></button></td>');
                 }
+
+                else {
+                    field = $("<td>" + this.data[i][j] + "</td>");
+                }
+
+                row.append(field);
             }
-            if(i !== 0) {
+            if(i !== 0 && i !== this.rows) {
                 deleteButton = $('<td class="actions"><button class="deleteRow fa fa-times" aria-hidden="true"></button></td>');
             }
             row.append(deleteButton);
             this.div.find("tbody").append(row);
         }
-
-        delete_column_row.append($('<td class="actions"></td>'));
-        this.div.find("tfoot").append(delete_column_row);
     };
 
     this.update = function() {
     // Updates the table from its div element
         var dataArray = [];
         var parent = this;
-        this.div.find("tbody tr").each(function() {
+        this.div.find("tbody tr").not(':last').each(function() {
             var row = [];
             $(this).children("td").not('.actions').each(function() {
                 row.push(parent.parse($(this).text()));
@@ -203,7 +204,7 @@ function ChartTable(targetDiv, inputJSON){
             rowSelector.append($('<td>').makeEditable());
         }
         rowSelector.append($('<td class="actions"><button class="deleteRow fa fa-times" aria-hidden="true"></button></td>'));
-        this.div.find("tbody").append(rowSelector);
+        this.div.find("tbody tr:last").before(rowSelector);
         this.rows++;
     };
 
@@ -220,10 +221,11 @@ function ChartTable(targetDiv, inputJSON){
 
     this.addColumn = function() {
         var self = this;
-        this.div.find("tbody tr").each(function() {
+
+        this.div.find("tbody tr").not(':last').each(function() {
             $(this).find('td:last').before($('<td>').makeEditable());
         });
-        this.div.find("tfoot tr").each(function() {
+        this.div.find("tbody tr:last").each(function() {
             $(this).find('td:last').before($('<td class="actions"><button data-columnnumber="' + self.columns + '" class="deleteColumn fa fa-times" aria-hidden="true"></button></td>'));
         });
         this.columns++;
