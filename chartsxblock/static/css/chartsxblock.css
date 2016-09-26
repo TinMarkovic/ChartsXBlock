@@ -79,7 +79,7 @@ textarea{
     background-color: #f2f2f2;
 }
 
-.modal {
+.advancedModal {
     display: none; /* Hidden by default */
     position: fixed;
     top: 0;
@@ -92,46 +92,49 @@ textarea{
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-/* Modal Content/Box */
-.modal-content {
+.modalContent {
     text-align: center;
     background-color: #fefefe;
-    margin: 15% auto;
-    border: 1px solid #888;
-    width: 80%;
+    width: 60%;
+    margin: 0 auto;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 .closeModalBlock {
-    color: red;
-    font-size: 28px;
-    font-weight: bold;
+    margin: 15% auto !important;
+    margin-bottom: 0 !important;
     text-align: right;
-    width: 100%;
+    width: 60%;
     height: 40px;
-    background-color: #aaaaaa;
+    background-color: #bbbbbb;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
-.closeModal {
-    margin-right: 1%;
+.closeModalIcon {
+    margin-top: 10px;
+    margin-right: 2%;
+    font-size: large;
 }
 
 .closeModal:hover,
 .closeModal:focus {
-    color: crimson;
-    text-decoration: none;
     cursor: pointer;
 }
 
 .modalTitle {
     font-weight: bolder;
+    margin: 2% auto;
 }
 
-.dataBlock {
-
+.dataTextBlock {
+    margin: 2% auto;
 }
 
 .dataText {
     margin: 0 auto;
     width: 60%;
-    height: 100px;
+    height: 200px;
+    font-size: medium;
 }
