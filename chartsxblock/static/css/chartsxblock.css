@@ -40,6 +40,13 @@ textarea{
     color: #fff;
 }
 
+.deleteRow, .deleteColumn{
+    background-color: red;
+    color: white;
+    border-color: red;
+    border-radius: 5px;
+}
+
 .chart-table {
     margin-top: 20px;
     margin-right: 20px;

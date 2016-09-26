@@ -6,7 +6,7 @@ function ChartsXBlockStudio(runtime, element, data) {
         chartTypes = data.chartTypes;
         chart = new ChartTable($(".chartsxblock_table"), data.chartData);
         chart.draw();
-        $("td").makeEditable();
+        $("td").not('.actions').makeEditable();
     });
 
     $(element).find(".updateButton").click(function(){
@@ -36,16 +36,16 @@ function ChartsXBlockStudio(runtime, element, data) {
     $( ".chart-right-add" ).click(function() {
         chart.addColumn();
     });
-    $( ".chart-bottom-del" ).click(function() {
+    $(element).on('click', '.deleteRow', function(event) {
         try{
-            chart.removeRow();
+            chart.removeRow($(event.target).parent().parent());
         } catch (e) {
             showError(runtime, e);
         }
     });
-    $( ".chart-right-del" ).click(function() {
+    $(element).on('click', '.deleteColumn', function(event) {
         try{
-            chart.removeColumn();
+            chart.removeColumn($(event.target).data('columnnumber') + 1);
         } catch (e) {
             showError(runtime, e);
         }
@@ -142,12 +142,29 @@ function ChartTable(targetDiv, inputJSON){
 
     this.draw = function() {
     // Draws the table in a div
-        for (var i = 0; i < this.rows; i++) {
-            var row = $("<tr>");
+        var delete_column_row = $("<tr>"),
+            delete_column = '';
+
+        for (var i = 0; i < this.rows + 1; i++) {
+            var row = $("<tr>"),
+                deleteButton = '<td class="actions"></td>';
             for (var j = 0; j < this.columns; j++) {
-                var field = $("<td>" + this.data[i][j] + "</td>");
+                var field;
+
+                if(i === this.rows) {
+                    field = $('<td class="actions"><button data-columnnumber="' + j + '" class="deleteColumn fa fa-times" aria-hidden="true"></button></td>');
+                }
+
+                else {
+                    field = $("<td>" + this.data[i][j] + "</td>");
+                }
+
                 row.append(field);
             }
+            if(i !== 0 && i !== this.rows) {
+                deleteButton = $('<td class="actions"><button class="deleteRow fa fa-times" aria-hidden="true"></button></td>');
+            }
+            row.append(deleteButton);
             this.div.find("tbody").append(row);
         }
     };
@@ -156,9 +173,9 @@ function ChartTable(targetDiv, inputJSON){
     // Updates the table from its div element
         var dataArray = [];
         var parent = this;
-        this.div.find("tbody tr").each(function() {
+        this.div.find("tbody tr").not(':last').each(function() {
             var row = [];
-            $(this).children("td").each(function() {
+            $(this).children("td").not('.actions').each(function() {
                 row.push(parent.parse($(this).text()));
             });
             dataArray.push(row);
@@ -183,31 +200,50 @@ function ChartTable(targetDiv, inputJSON){
 
     this.addRow = function() {
         var rowSelector = $('<tr>');
-        this.div.find("tbody").append(rowSelector);
         for (var i = 0; i < this.columns; i++) {
             rowSelector.append($('<td>').makeEditable());
         }
+        rowSelector.append($('<td class="actions"><button class="deleteRow fa fa-times" aria-hidden="true"></button></td>'));
+        this.div.find("tbody tr:last").before(rowSelector);
         this.rows++;
     };
 
-    this.removeRow = function() {
+    this.removeRow = function(row=null) {
         if(this.rows <2) throw {name: "Dimensions Error", message: "You cannot have 0 rows."};
-        this.div.find("tbody > tr:last").remove();
+        if(row) {
+            row.remove();
+        }
+        else {
+            this.div.find("tbody > tr:last").remove();
+        }
         this.rows--;
-    };
+    }
 
     this.addColumn = function() {
-        this.div.find("tbody tr").each(function() {
-            $(this).append($('<td>').makeEditable());
+        var self = this;
+
+        this.div.find("tbody tr").not(':last').each(function() {
+            $(this).find('td:last').before($('<td>').makeEditable());
+        });
+        this.div.find("tbody tr:last").each(function() {
+            $(this).find('td:last').before($('<td class="actions"><button data-columnnumber="' + self.columns + '" class="deleteColumn fa fa-times" aria-hidden="true"></button></td>'));
         });
         this.columns++;
     };
 
-    this.removeColumn = function() {
+    this.removeColumn = function(columnNumber) {
         if(this.columns <2) throw {name: "Dimensions Error", message: "You cannot have 0 columns."};
-        this.div.find("tbody tr").each(function() {
-            $(this).find("> td:last").remove();
-        });
+        if(columnNumber) {
+            this.div.find("tbody tr td:nth-child(" + columnNumber + ")").remove();
+            this.div.find("tfoot tr td:nth-child(" + columnNumber + ")").remove();
+        }
+
+        else {
+            this.div.find("tbody tr").each(function() {
+                $(this).find("> td:last").remove();
+            });
+        }
         this.columns--;
-    };
+    }
+
 }

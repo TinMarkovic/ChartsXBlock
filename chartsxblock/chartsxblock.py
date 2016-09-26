@@ -12,6 +12,7 @@ class ChartsXBlock(XBlock):
     """
     XBlock displaying different kinds of Charts to the end user.
     """
+    display_name = String(default="Charts")
     chart_types = ('Pie', 'Line', 'Column', 'Area', 'Scatter', 'Bar')
     chart_data = String(
         default='''[
