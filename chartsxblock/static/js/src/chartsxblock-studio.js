@@ -36,6 +36,19 @@ function ChartsXBlockStudio(runtime, element, data) {
     $( ".chart-right-add" ).click(function() {
         chart.addColumn();
     });
+    $(element).find('.advanced').click(function() {
+        $(element).find('.modal').show();
+    });
+    $(element).find('.closeModal').click(function() {
+        $(element).find('.modal').hide();
+    });
+
+    $(element).find('.dataText').val(chart.json());
+
+    $(element).find('.submitDataText').click(function() {
+        $(element).find('.modal').hide();
+        chart.setData($(element).find('.dataText').val());
+    });
     $(element).on('click', '.deleteRow', function(event) {
         try{
             chart.removeRow($(event.target).parent().parent());
@@ -142,9 +155,6 @@ function ChartTable(targetDiv, inputJSON){
 
     this.draw = function() {
     // Draws the table in a div
-        var delete_column_row = $("<tr>"),
-            delete_column = '';
-
         for (var i = 0; i < this.rows + 1; i++) {
             var row = $("<tr>"),
                 deleteButton = '<td class="actions"></td>';
@@ -244,6 +254,15 @@ function ChartTable(targetDiv, inputJSON){
             });
         }
         this.columns--;
+    }
+
+    this.setData = function(newData) {
+        this.data = JSON.parse(newData),
+        this.rows = this.data.length,
+        this.columns = this.data[0].length;
+
+        this.div.find('table tbody').empty();
+        this.draw();
     }
 
 }
