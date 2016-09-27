@@ -141,25 +141,24 @@ function ValidateData(inputString) {
 }
 
 /*
-A function that validates data types for each field in data array
- */
+    A function that validates data types for each field in data array
+    Throws an error if it fnds one
+*/
 function ValidateDataType(inputArray) {
-    inputArray.forEach(function(dataElement, index) {
-        if (index === 0) {
-            if((typeof dataElement[0] !== "string") || (typeof dataElement[1] !== "string")) {
-                throw new BadChartError("Type error! Title elements must be type 'string'!");
-            }
+    inputArray.forEach(function (dataRow, rowIndex) {
+        if (rowIndex === 0) {
+            dataRow.forEach(function (dataField) {
+                if((typeof dataField !== "string") || (typeof dataField !== "string")) {
+                    throw new BadChartError("Type error! Header elements must be type 'string'!");
+                }
+            });
         }
         else {
-            if (typeof dataElement[0] !== "string") {
-                throw new BadChartError("Type error! First column data must be type 'string'!");
-            }
-            if (dataElement[0] === "") {
-                throw new BadChartError("Type error! First column data must be non-empty!");
-            }
-            if (typeof dataElement[1] !== "number") {
-                throw new BadChartError("Type error! Second column data must be type 'number'!");
-            }
+            dataRow.forEach(function (dataField, fieldIndex) {
+                if((typeof dataField !== "number") && fieldIndex !== 0) {
+                    throw new BadChartError("Type error! Column data after first column must be type 'number'!");
+                }
+            });
         }
     });
 }
