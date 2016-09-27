@@ -95,17 +95,17 @@ textarea{
 .modalContent {
     text-align: center;
     background-color: #fefefe;
-    width: 60%;
+    width: 40%;
     margin: 0 auto;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
 
-.closeModalBlock {
-    margin: 15% auto !important;
+.modalHeader {
+    margin: 5% auto !important;
     margin-bottom: 0 !important;
     text-align: right;
-    width: 60%;
+    width: 40%;
     height: 40px;
     background-color: #bbbbbb;
     border-top-right-radius: 5px;
@@ -129,7 +129,7 @@ textarea{
 }
 
 .dataTextBlock {
-    margin: 2% auto;
+    margin: 5% auto;
 }
 
 .dataText {
@@ -137,4 +137,17 @@ textarea{
     width: 60%;
     height: 200px;
     font-size: medium;
+}
+
+.cancelButton {
+    transition: background-color 0.15s,box-shadow 0.15s;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset,0 0 0 transparent;
+    display: inline-block;
+    padding: 4px 20px 5px;
+    background-image: linear-gradient(to bottom,rgba(255,255,255,0.3),rgba(255,255,255,0));
+    border: 1px solid #0074b4;
+    border-radius: 3px;
+    background-color: #d9d9d9;
+    border-color: #404040;
+    color: #000;
 }
