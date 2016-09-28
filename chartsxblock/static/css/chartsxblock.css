@@ -135,9 +135,11 @@ textarea{
 
 .dataText, .optionsText {
     margin: 0 auto;
+    padding: 2%;
     width: 60%;
     height: 200px;
     font-size: medium;
+    border: 1px solid black;
 }
 
 .cancelButton {

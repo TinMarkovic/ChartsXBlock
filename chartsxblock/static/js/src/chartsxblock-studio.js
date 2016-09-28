@@ -2,6 +2,8 @@
 function ChartsXBlockStudio(runtime, element, data) {
     var chart, chartTypes,
         optionsObject = JSON.parse(data.chartOptions),
+        $dataText = $(element).find('.dataText'),
+        $optionsText = $(element).find('.optionsText'),
         optionsTitle = $(element).find('.title'),
         optionsWidth = $(element).find('.width'),
         optionsHeight = $(element).find('.height'),
@@ -48,8 +50,11 @@ function ChartsXBlockStudio(runtime, element, data) {
         }
     });
 
-    $(element).find('.dataText').val(chart.json());
-    $(element).find('.optionsText').val(data.chartOptions);
+    $dataText.val(chart.json());
+    $optionsText.val(data.chartOptions);
+
+    $dataText.prettyJSON();
+    $optionsText.prettyJSON();
 
     $( ".chart-bottom-add" ).click(function() {
         chart.addRow();
@@ -66,8 +71,8 @@ function ChartsXBlockStudio(runtime, element, data) {
 
     $(element).find('.submitDataText').click(function() {
         $(element).find('.modal').hide();
-        var data = $(element).find('.dataText').val(),
-            options = $(element).find('.optionsText').val();
+        var data = $dataText.val(),
+            options = $optionsText.val();
         chart.setData(data, options);
     });
 
@@ -139,6 +144,19 @@ $.fn.makeEditable = function() {
     });
     return this;
 };
+
+/*
+    Function to prettify texarea JSON value
+ */
+$.fn.prettyJSON = function() {
+    var ugly = this.val(),
+        parsed = JSON.parse(ugly),
+        pretty = JSON.stringify(parsed, undefined, 4);
+
+    this.val(pretty);
+
+    return this;
+}
 
 function showError(runtime, errorMsg) {
     runtime.notify('error', {msg: errorMsg});
