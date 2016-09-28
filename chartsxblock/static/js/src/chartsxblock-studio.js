@@ -2,6 +2,7 @@
 function ChartsXBlockStudio(runtime, element, data) {
     var chart, chartTypes,
         optionsObject = JSON.parse(data.chartOptions),
+        $chartsTitle = $(element).find('.chartsTitle'),
         $dataText = $(element).find('.dataText'),
         $optionsText = $(element).find('.optionsText'),
         optionsTitle = $(element).find('.title'),
@@ -9,14 +10,14 @@ function ChartsXBlockStudio(runtime, element, data) {
         optionsHeight = $(element).find('.height'),
         optionsIs3d = $(element).find('.is3d');
 
-    $(element).find('.chartsTitleName').text(optionsObject.title);
+    $chartsTitle.text(optionsObject.title);
 
     optionsTitle.val(optionsObject.title);
     optionsWidth.val(optionsObject.width);
     optionsHeight.val(optionsObject.height);
 
     if (optionsObject.is3D === 'true') {
-        optionsIs3d.prop('checked', 'checked');
+        optionsIs3d.prop('checked', true);
     }
 
     $(function ($) {
@@ -72,7 +73,20 @@ function ChartsXBlockStudio(runtime, element, data) {
     $(element).find('.submitDataText').click(function() {
         $(element).find('.modal').hide();
         var data = $dataText.val(),
-            options = $optionsText.val();
+            options = $optionsText.val(),
+            optionObject = JSON.parse(options);
+
+        $chartsTitle.text(optionObject.title);
+        
+        optionsTitle.val(optionObject.title);
+        optionsWidth.val(optionObject.width);
+        optionsHeight.val(optionObject.height);
+        optionsIs3d.prop('checked', false);
+
+        if(optionObject.is3D === "true") {
+            optionsIs3d.prop('checked', true);
+        }
+
         chart.setData(data, options);
     });
 
@@ -92,6 +106,18 @@ function ChartsXBlockStudio(runtime, element, data) {
         if (!optionsIs3d.prop('checked')) {
             options.is3D = "false";
         }
+
+        var advancedOptions = JSON.parse($optionsText.val());
+
+        advancedOptions.title = options.title;
+        advancedOptions.width = options.width;
+        advancedOptions.height = options.height;
+        advancedOptions.is3D = options.is3D;
+
+        $optionsText.val(JSON.stringify(advancedOptions));
+        $optionsText.prettyJSON();
+
+        $chartsTitle.text(options.title);
 
         options = JSON.stringify(options);
         chart.setOptions(options);
@@ -146,7 +172,7 @@ $.fn.makeEditable = function() {
 };
 
 /*
-    Function to prettify texarea JSON value
+    Function to prettify textarea JSON value
  */
 $.fn.prettyJSON = function() {
     var ugly = this.val(),

@@ -1,6 +1,6 @@
 <div class="chartsxblock_block">
     <div class="chartsxblock_settings">
-        <h1 class="chartsTitleName"></h1>
+        <h1 class="chartsTitle"></h1>
         <select class="chart_type" name="chart_type">
             {% for chart in self.chart_types %}
                 <option value="{{chart}}" {% if chart == self.chart_type %} selected="selected" {% endif %} >

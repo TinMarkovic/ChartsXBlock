@@ -8,6 +8,12 @@
     padding: 20px;
 }
 
+.chartsTitle {
+    display: inline;
+    margin: 2%;
+    margin-left: 0;
+}
+
 textarea{
     resize: none;
     border-radius: 3px;
