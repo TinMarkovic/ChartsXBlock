@@ -1,10 +1,25 @@
 /* Javascript for ChartsXBlock-Studio. */
 function ChartsXBlockStudio(runtime, element, data) {
-    var chart, chartTypes;
+    var chart, chartTypes,
+        optionsObject = JSON.parse(data.chartOptions),
+        optionsTitle = $(element).find('.title'),
+        optionsWidth = $(element).find('.width'),
+        optionsHeight = $(element).find('.height'),
+        optionsIs3d = $(element).find('.is3d');
+
+    $(element).find('.chartsTitleName').text(optionsObject.title);
+
+    optionsTitle.val(optionsObject.title);
+    optionsWidth.val(optionsObject.width);
+    optionsHeight.val(optionsObject.height);
+
+    if (optionsObject.is3D === 'true') {
+        optionsIs3d.prop('checked', 'checked');
+    }
 
     $(function ($) {
         chartTypes = data.chartTypes;
-        chart = new ChartTable($(".chartsxblock_table"), data.chartData);
+        chart = new ChartTable($(".chartsxblock_table"), data.chartData, data.chartOptions);
         chart.draw();
         $("td").not('.actions').makeEditable();
     });
@@ -13,14 +28,17 @@ function ChartsXBlockStudio(runtime, element, data) {
         try{
             runtime.notify('save', {state: 'start'});
             var cleanType = ValidateType($(element).find(".chart_type").val(), chartTypes);
-            var cleanName = ValidateName($(element).find(".chart_name").val());
             var cleanData = ValidateData(chart.json());
+            var cleanOptions = ValidateOptions(chart.getChartOptions());
             var handlerUrl = runtime.handlerUrl(element, 'edit_data');
 
             $.ajax({
                 type: "POST",
                 url: handlerUrl,
-                data: JSON.stringify({name: cleanName, type: cleanType, data: cleanData}),
+                data: JSON.stringify({
+                    type: cleanType,
+                    data: cleanData,
+                    options: cleanOptions}),
                 success: function(){ runtime.notify('save', {state: 'end'});
                 }
             });
@@ -30,6 +48,9 @@ function ChartsXBlockStudio(runtime, element, data) {
         }
     });
 
+    $(element).find('.dataText').val(chart.json());
+    $(element).find('.optionsText').val(data.chartOptions);
+
     $( ".chart-bottom-add" ).click(function() {
         chart.addRow();
     });
@@ -37,18 +58,40 @@ function ChartsXBlockStudio(runtime, element, data) {
         chart.addColumn();
     });
     $(element).find('.advanced').click(function() {
-        $(element).find('.modal').show();
+        $(element).find('.advancedModal').show();
     });
     $(element).find('.closeModal').click(function() {
         $(element).find('.modal').hide();
     });
 
-    $(element).find('.dataText').val(chart.json());
-
     $(element).find('.submitDataText').click(function() {
         $(element).find('.modal').hide();
-        chart.setData($(element).find('.dataText').val());
+        var data = $(element).find('.dataText').val(),
+            options = $(element).find('.optionsText').val();
+        chart.setData(data, options);
     });
+
+    $(element).find('.optionsBtn').click(function() {
+        $(element).find('.optionsModal').show();
+    });
+
+    $(element).find('.submitOptionsText').click(function () {
+        $(element).find('.modal').hide();
+        var options = {
+            title: optionsTitle.val(),
+            width: optionsWidth.val(),
+            height: optionsHeight.val(),
+            is3D: "true"
+        }
+
+        if (!optionsIs3d.prop('checked')) {
+            options.is3D = "false";
+        }
+
+        options = JSON.stringify(options);
+        chart.setOptions(options);
+    });
+
     $(element).on('click', '.deleteRow', function(event) {
         try{
             chart.removeRow($(event.target).parent().parent());
@@ -142,7 +185,7 @@ function ValidateData(inputString) {
 
 /*
     A function that validates data types for each field in data array
-    Throws an error if it fnds one
+    Throws an error if it finds one
 */
 function ValidateDataType(inputArray) {
     inputArray.forEach(function (dataRow, rowIndex) {
@@ -168,13 +211,21 @@ function ValidateType(inputString, chartTypes) {
     return inputString;
 }
 
-function ValidateName(inputString) {
-    if(inputString.length < 1) throw new BadChartError("Chart name is empty.");
-    return inputString;
+function ValidateOptions(inputOptionsString) {
+    var optionsJSON;
+
+    try {
+        optionsJSON = JSON.parse(inputOptionsString);
+    } catch(e) {
+        throw e;
+    }
+
+    return inputOptionsString;
 }
 
-function ChartTable(targetDiv, inputJSON){
+function ChartTable(targetDiv, inputJSON, optionsJSON){
     this.data = JSON.parse(inputJSON);
+    this.options = optionsJSON;
     this.rows = this.data.length;
     this.columns = this.data[0].length;
     this.div = targetDiv;
@@ -192,7 +243,7 @@ function ChartTable(targetDiv, inputJSON){
                 }
 
                 else {
-                    field = $("<td>" + this.data[i][j] + "</td>");
+                    field = $("<td>" + this.data[i][j] + "</td>").makeEditable();
                 }
 
                 row.append(field);
@@ -282,13 +333,22 @@ function ChartTable(targetDiv, inputJSON){
         this.columns--;
     }
 
-    this.setData = function(newData) {
-        this.data = JSON.parse(newData),
-        this.rows = this.data.length,
+    this.getChartOptions = function() {
+        return this.options;
+    }
+
+    this.setData = function(newData, newOptions) {
+        this.data = JSON.parse(newData);
+        this.options = newOptions;
+        this.rows = this.data.length;
         this.columns = this.data[0].length;
 
         this.div.find('table tbody').empty();
         this.draw();
+    },
+
+    this.setOptions = function (newOptions) {
+        this.options = newOptions;
     }
 
 }

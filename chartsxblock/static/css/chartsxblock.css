@@ -79,7 +79,7 @@ textarea{
     background-color: #f2f2f2;
 }
 
-.advancedModal {
+.advancedModal, .optionsModal {
     display: none; /* Hidden by default */
     position: fixed;
     top: 0;
@@ -96,6 +96,7 @@ textarea{
     text-align: center;
     background-color: #fefefe;
     width: 40%;
+    height: 650px !important;
     margin: 0 auto;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -132,7 +133,7 @@ textarea{
     margin: 5% auto;
 }
 
-.dataText {
+.dataText, .optionsText {
     margin: 0 auto;
     width: 60%;
     height: 200px;
@@ -150,4 +151,18 @@ textarea{
     background-color: #d9d9d9;
     border-color: #404040;
     color: #000;
+}
+
+.modalOptionsContent {
+    text-align: center;
+    background-color: #fefefe;
+    height: 400px !important;
+    width: 40%;
+    margin: 0 auto;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.optionWrappers {
+    margin: 5% auto;
 }

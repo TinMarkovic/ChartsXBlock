@@ -53,11 +53,16 @@ class ChartsXBlock(XBlock):
         scope=Scope.content,
         help="String holding the type of the chart",
     )
-    chart_name = String(
-        default='Worker salaries overview',
-        scope=Scope.content,
-        help="String holding the name of the chart",
-    )
+    chart_options = String(
+      default='''
+      {
+        "title": "Worker salaries overwiev",
+        "width": 891,
+        "height": 700,
+        "format": "currency",
+        "is3D": "false"
+      }
+      ''')
 
     @staticmethod
     def resource_string(path):
@@ -74,8 +79,8 @@ class ChartsXBlock(XBlock):
         frag.add_javascript(self.resource_string("static/js/src/chartsxblock.js"))
         frag.initialize_js('ChartsXBlock', {'chartData': self.chart_data,
                                             'chartType': self.chart_type,
-                                            'chartName': self.chart_name,
-                                            'chartTypes': self.chart_types})
+                                            'chartTypes': self.chart_types,
+                                            'chartOptions': self.chart_options})
         return frag
 
     def studio_view(self, context=None):  # pylint: disable=unused-argument
@@ -90,14 +95,14 @@ class ChartsXBlock(XBlock):
         frag.add_javascript(self.resource_string("static/js/src/chartsxblock-studio.js"))
         frag.initialize_js('ChartsXBlockStudio', {'chartData': self.chart_data,
                                                   'chartType': self.chart_type,
-                                                  'chartName': self.chart_name,
-                                                  'chartTypes': self.chart_types})
+                                                  'chartTypes': self.chart_types,
+                                                  'chartOptions': self.chart_options})
         return frag
 
     @XBlock.json_handler
     def edit_data(self, data, suffix=''):  # pylint: disable=unused-argument
         """Method saving the sent data to the XBlock database."""
-        self.chart_name = data["name"].strip(" ")
         self.chart_type = data["type"]
         self.chart_data = data["data"].strip(" ")
+        self.chart_options = data["options"].strip(" ")
         return True
