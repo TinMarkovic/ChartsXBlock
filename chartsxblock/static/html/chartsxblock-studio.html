@@ -11,8 +11,6 @@
         <div class="chartsxblock_table">
         <button class="chart-right-add fancyButton"> Add Column </button>
         <button class="chart-bottom-add fancyButton"> Add Row </button>
-        <button class="advanced fancyButton">Advanced</button>
-        <button class="optionsBtn fancyButton">Options</button>
 
             <table class="chart-table chart-table-striped">
                 <tbody>
@@ -23,58 +21,57 @@
         </div>
         <button class="updateButton fancyButton">Update</button>
     </div>
+</div>
 
-    <div class="modal advancedModal">
-        <div class="dataBlock">
-            <div class="modal-header modalHeader">
-                <span class="closeModal closeModalIcon fa fa-times"></span>
-            </div>
-
-          <!-- Modal content -->
-            <div class="modal-content modalContent">
-                <h1 class="modalTitle">JSON data to update</h1>
-                <div class="dataTextBlock">
-                    <textarea class="dataText">Input JSON goes here</textarea>
-                </div>
-                <div class="dataTextBlock">
-                    <h1 class="modalTitle">Options</h1>
-                    <textarea class="optionsText"></textarea>
-                </div>
-                <div class=""></div>
-                <button class="fancyButton submitDataText">Submit</button>
-                <button class="closeModal cancelButton">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal optionsModal">
+<div class="modal advancedModal">
+    <div class="dataBlock">
         <div class="modal-header modalHeader">
             <span class="closeModal closeModalIcon fa fa-times"></span>
         </div>
 
-        <div class="modal-content modalOptionsContent">
-            <div class="optionWrappers">
-                <label for=".title">Title: </label>
-                <input type="text" name="title" class="title" placeholder="title" />
+      <!-- Modal content -->
+        <div class="modal-content modalContent">
+            <h1 class="modalTitle">JSON data to update</h1>
+            <div class="dataTextBlock">
+                <textarea class="dataText">Input JSON goes here</textarea>
             </div>
-
-            <div class="optionWrappers">
-                <label for=".width">Width: </label>
-                <input type="number" name="width" class="width" placeholder="width" />px
+            <div class="dataTextBlock">
+                <h1 class="modalTitle">Options</h1>
+                <textarea class="optionsText"></textarea>
             </div>
-
-            <div class="optionWrappers">
-                <label for=".height">Height: </label>
-                <input type="number" name="height" class="height" placeholder="height" />px
-            </div>
-
-            <div class="optionWrappers">
-                <label for=".is3d">3D: </label>
-                <input type="checkbox" name="is3d" class="is3d" placeholder="is3d" />
-            </div>
-
-            <button class="fancyButton submitOptionsText">Submit</button>
+            <button class="fancyButton submitDataText">Submit</button>
             <button class="closeModal cancelButton">Cancel</button>
         </div>
+    </div>
+</div>
+
+<div class="modal optionsModal">
+    <div class="modal-header modalHeader">
+        <span class="closeModal closeModalIcon fa fa-times"></span>
+    </div>
+
+    <div class="modal-content modalOptionsContent">
+        <div class="optionWrappers">
+            <label for=".title">Title: </label>
+            <input type="text" name="title" class="title" placeholder="title" />
+        </div>
+
+        <div class="optionWrappers">
+            <label for=".width">Width: </label>
+            <input type="number" name="width" class="width" placeholder="width" />px
+        </div>
+
+        <div class="optionWrappers">
+            <label for=".height">Height: </label>
+            <input type="number" name="height" class="height" placeholder="height" />px
+        </div>
+
+        <div class="optionWrappers">
+            <label for=".is3d">3D: </label>
+            <input type="checkbox" name="is3d" class="is3d" placeholder="is3d" />
+        </div>
+
+        <button class="fancyButton submitOptionsText">Submit</button>
+        <button class="closeModal cancelButton">Cancel</button>
     </div>
 </div>

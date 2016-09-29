@@ -8,7 +8,14 @@ function ChartsXBlockStudio(runtime, element, data) {
         optionsTitle = $(element).find('.title'),
         optionsWidth = $(element).find('.width'),
         optionsHeight = $(element).find('.height'),
-        optionsIs3d = $(element).find('.is3d');
+        optionsIs3d = $(element).find('.is3d'),
+        xblockEditHeader = $(element).parent().parent().parent()
+            .children('.modal-header').children('.action-list'),
+        advancedLi = '<li class="actionElements"><button class="advanced fancyButton">Advanced</button></li>',
+        optionsBtnLi = '<li class="actionElements"><button class="optionsBtn fancyButton">Options</button></li>';
+
+    xblockEditHeader.append(advancedLi);
+    xblockEditHeader.append(optionsBtnLi);
 
     $chartsTitle.text(optionsObject.title);
 
@@ -63,7 +70,7 @@ function ChartsXBlockStudio(runtime, element, data) {
     $( ".chart-right-add" ).click(function() {
         chart.addColumn();
     });
-    $(element).find('.advanced').click(function() {
+    xblockEditHeader.find('.advanced').click(function() {
         $(element).find('.advancedModal').show();
     });
     $(element).find('.closeModal').click(function() {
@@ -90,7 +97,7 @@ function ChartsXBlockStudio(runtime, element, data) {
         chart.setData(data, options);
     });
 
-    $(element).find('.optionsBtn').click(function() {
+    xblockEditHeader.find('.optionsBtn').click(function() {
         $(element).find('.optionsModal').show();
     });
 
